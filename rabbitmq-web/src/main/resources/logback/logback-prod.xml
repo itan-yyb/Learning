@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="false">
+    <!--需要根据业务修改-->
+    <springProperty scope="context" name="APP_NAME" source="spring.application.name"/><!--应用名-->
+    <springProperty scope="context" name="APP_VERSION" source="spring.application.version"/><!--应用版本-->
+    <property name="LOG_HOME" value="logs"/><!--日志根目录-->
+    <property name="FILE_PATH" value="${LOG_HOME}/${APP_NAME}"/>
+    <property name="FILE_PATTERN" value=".%d{yyyy-MM-dd}-%i.log"/>
+    <springProperty scope="context" name="MAX_SIZE" source="logging.file.max-size"/><!--分包大小-->
+    <springProperty scope="context" name="MAX_HISTORY" source="logging.file.max-history"/><!--保留日志数量-->
+    <springProperty scope="context" name="BASE_PACKAGE" source="logging.base-package"/><!--当前项目的主包-->
+
+
+    <!--业务日志-->
+    <appender name="BIZ_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="com.xiaoma.framework.logging.filter.MultiLevelFilter">
+            <level>INFO,WARN</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <FileNamePattern>${FILE_PATH}/biz${FILE_PATTERN}</FileNamePattern>
+            <maxHistory>${MAX_HISTORY}</maxHistory>
+            <maxFileSize>${MAX_SIZE}</maxFileSize>
+        </rollingPolicy>
+        <encoder>
+            <!--时间,日志级别，应用名, 应用版本，traceid,接口版本,类名.方法名,行数,关键参数-->
+            <Pattern>
+                %d{yyyy/MM/dd-HH:mm:ss.SSS},%-5level,${APP_NAME},${APP_VERSION},%X{X-B3-TraceId},%C{2}.%M,%L,%msg%n
+            </Pattern>
+        </encoder>
+    </appender>
+
+
+    <!--业务摘要日志-->
+    <appender name="BIZ_DIG_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <FileNamePattern>${FILE_PATH}/biz-digest${FILE_PATTERN}</FileNamePattern>
+            <maxHistory>${MAX_HISTORY}</maxHistory>
+            <maxFileSize>${MAX_SIZE}</maxFileSize>
+        </rollingPolicy>
+        <encoder>
+            <!--时间,日志级别,应用名,应用版本,traceid, [(业务类型)(接口名称方法,接口版本号, 处理结果类型,耗时)(结果码)(请求参数列表)]-->
+            <Pattern>
+                %d{yyyy/MM/dd-HH:mm:ss.SSS},%-5level,${APP_NAME},${APP_VERSION},%X{X-B3-TraceId},[\(%X{bizType}\),\(%X{interfaceName},%X{interfaceVersion},%X{resultType},%X{cost}\),\(%X{resultCode}\),\(%msg\)]%n
+            </Pattern>
+        </encoder>
+    </appender>
+
+    <!--数据库访问摘要日志-->
+    <appender name="DB_DIG_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <FileNamePattern>${FILE_PATH}/db/db-digest${FILE_PATTERN}</FileNamePattern>
+            <maxHistory>${MAX_HISTORY}</maxHistory>
+            <!-- 触发策略，达到一定条件时将通知appender，触发滚动 -->
+            <maxFileSize>${MAX_SIZE}</maxFileSize>
+        </rollingPolicy>
+        <encoder>
+            <!--时间，日志级别,应用名，应用版本，逻辑数据库名，traceid，[(类名.方法名)，(数据库操作类型，具体sql，resultType，耗时)]。sql的value不能打印。-->
+            <Pattern>
+                %d{yyyy/MM/dd-HH:mm:ss.SSS},%-5level,${APP_NAME},${APP_VERSION},%X{sourceName},%X{X-B3-TraceId},[\(%X{interfaceName}\),\(%X{dbOperationType},%X{showSql},%X{resultType},%X{cost}\)]%n
+            </Pattern>
+        </encoder>
+    </appender>
+
+    <!--缓存访问摘要日志-->
+    <appender name="CACHE_DIG_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <FileNamePattern>${FILE_PATH}/cache/cache-digest${FILE_PATTERN}</FileNamePattern>
+            <maxHistory>${MAX_HISTORY}</maxHistory>
+            <maxFileSize>${MAX_SIZE}</maxFileSize>
+        </rollingPolicy>
+        <encoder>
+            <!--时间, 日志级别，应用名，应用版本，库标识，traceid,[(类名.方法名),(操作类型)，(resultType),(耗时)，(缓存关键id)]-->
+            <Pattern>
+                %d{yyyy/MM/dd-HH:mm:ss.SSS},%-5level,${APP_NAME},${APP_VERSION},%X{sourceName},%X{X-B3-TraceId},[\(%X{bizType}\),\(%X{cacheOpType}\),\(%X{resultType}\),\(%X{cost}\),\(%msg\)]%n
+            </Pattern>
+        </encoder>
+    </appender>
+
+    <!--MQ摘要日志-->
+    <appender name="MQ_DIG_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <FileNamePattern>${FILE_PATH}/mq/mq-digest${FILE_PATTERN}</FileNamePattern>
+            <maxHistory>${MAX_HISTORY}</maxHistory>
+            <maxFileSize>${MAX_SIZE}</maxFileSize>
+        </rollingPolicy>
+        <encoder>
+            <!--时间, 日志级别，应用名，应用版本，topic,tag,traceid,[(类名.方法名),(操作类型)，(resultType),(耗时)，(msgId)]-->
+            <Pattern>
+                %d{yyyy/MM/dd-HH:mm:ss.SSS},%-5level,${APP_NAME},${APP_VERSION},%X{mqTopic},%X{mqTag},%X{X-B3-TraceId},[\(%X{interfaceName}\),\(%X{mqOperationType}\),\(%X{resultType}\),\(%X{cost}\),\(%msg\)]%n
+            </Pattern>
+        </encoder>
+    </appender>
+
+    <!--第三方调用摘要日志-->
+    <appender name="THIRD_API_DIG_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <FileNamePattern>${FILE_PATH}/third-digest${FILE_PATTERN}</FileNamePattern>
+            <maxHistory>${MAX_HISTORY}</maxHistory>
+            <maxFileSize>${MAX_SIZE}</maxFileSize>
+        </rollingPolicy>
+        <encoder>
+            <!--时间，日志级别，应用名，应用版本，外部应用名称，traceid,[(类名.方法名)(外部地址，resultType，耗时)(请求参数)]-->
+            <Pattern>
+                %d{yyyy/MM/dd-HH:mm:ss.SSS},%-5level,${APP_NAME},${APP_VERSION},%X{X-B3-TraceId},[\(%X{interfaceName}\),\(%X{externalUrl},%X{resultType},%X{cost}\)\(%msg\)]%n
+            </Pattern>
+        </encoder>
+    </appender>
+
+    <!--错误日志-->
+    <appender name="ERROR_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <FileNamePattern>${FILE_PATH}/error${FILE_PATTERN}</FileNamePattern>
+            <maxHistory>${MAX_HISTORY}</maxHistory>
+            <maxFileSize>${MAX_SIZE}</maxFileSize>
+        </rollingPolicy>
+        <encoder>
+            <Pattern>%d{yyyy/MM/dd-HH:mm:ss.SSS},%-5level,%X{X-B3-TraceId}-%msg%n</Pattern>
+        </encoder>
+    </appender>
+
+    <!--操作日志-->
+    <appender name="OP_DIG_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <FileNamePattern>${FILE_PATH}/op-dig${FILE_PATTERN}</FileNamePattern>
+            <maxHistory>${MAX_HISTORY}</maxHistory>
+            <maxFileSize>${MAX_SIZE}</maxFileSize>
+        </rollingPolicy>
+        <encoder>
+            <Pattern>%d{yyyy/MM/dd-HH:mm:ss.SSS},%-5level,%X{X-B3-TraceId}-%msg%n</Pattern>
+        </encoder>
+    </appender>
+
+    <!--开发控制台-->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder charset="UTF-8">
+            <pattern>
+                %d{yyyy/MM/dd-HH:mm:ss.SSS} [%thread] %-5level %logger{35} [%X{X-B3-TraceId}] - %msg %n
+            </pattern>
+        </encoder>
+    </appender>
+
+    <!--业务摘要日志-->
+    <logger name="BIZ_DIG_LOG" level="INFO" additivity="false">
+        <appender-ref ref="BIZ_DIG_LOG"/>
+    </logger>
+    <!--数据库摘要日志-->
+    <logger name="DB_DIG_LOG" level="INFO" additivity="false">
+        <appender-ref ref="DB_DIG_LOG"/>
+    </logger>
+    <!--缓存摘要日志-->
+    <logger name="CACHE_DIG_LOG" level="INFO" additivity="false">
+        <appender-ref ref="CACHE_DIG_LOG"/>
+    </logger>
+    <!--MQ摘要日志-->
+    <logger name="MQ_DIG_LOG" level="INFO" additivity="false">
+        <appender-ref ref="MQ_DIG_LOG"/>
+    </logger>
+    <!--第三方摘要日志-->
+    <logger name="THIRD_API_DIG_LOG" level="INFO" additivity="false">
+        <appender-ref ref="THIRD_API_DIG_LOG"/>
+    </logger>
+
+    <!--用户操作日志-->
+    <logger name="OP_DIG_LOG" level="INFO" additivity="false">
+        <appender-ref ref="OP_DIG_LOG"/>
+    </logger>
+
+    <!--业务日志,name到对应的模块，其他引用模块打印到其他日志中-->
+    <logger name="${BASE_PACKAGE}" level="INFO">
+        <appender-ref ref="BIZ_LOG"/>
+    </logger>
+
+    <!--全局错误日志-->
+    <root level="ERROR" additivity="false">
+        <appender-ref ref="ERROR_LOG"/>
+    </root>
+
+</configuration>
