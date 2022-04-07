@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.itan.entity.Order;
 import com.itan.entity.User;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.rabbit.connection.CorrelationData;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.utils.SerializationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,6 +76,22 @@ public class OrderMessageController {
                 User user = User.builder().id(i).userName(UUID.randomUUID().toString())
                         .age(20 + i).build();
                 rabbitTemplate.convertAndSend("queue4", user);
+            }
+        }
+    }
+
+    @GetMapping("/returnCallback")
+    public void sendMessage5() {
+        for (int i = 1; i < 5; i++) {
+            if (i % 2 == 0) {
+                Order order = Order.builder().id(i)
+                        .orderNo(UUID.randomUUID().toString())
+                        .price(15000f).remark("创建订单").build();
+                rabbitTemplate.convertAndSend("direct_exchange","a", order, new CorrelationData(UUID.randomUUID().toString()));
+            } else {
+                User user = User.builder().id(i).userName(UUID.randomUUID().toString())
+                        .age(20 + i).build();
+                rabbitTemplate.convertAndSend("direct_exchange","c", user, new CorrelationData(UUID.randomUUID().toString()));
             }
         }
     }

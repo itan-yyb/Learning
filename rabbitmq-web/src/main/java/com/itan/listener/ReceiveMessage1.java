@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
  */
 @Slf4j
 @Component
-@RabbitListener(queues = {"queue4"})
+@RabbitListener(queues = {"queue2","queue3","queue4"})
 public class ReceiveMessage1 {
     @RabbitHandler
     public void receive(Order order) {

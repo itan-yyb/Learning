@@ -33,19 +33,19 @@ public class ReceiveMessage {
      * T<发送消息的类型> t：可以直接写发送消息的类型，好处是不用手动转换消息的类型
      * 比如：直接使用Order order对象接收消息
      */
-    @RabbitListener(queues = {"queue1"})
+    // @RabbitListener(queues = {"queue1"})
     public void receive1(Order order) {
         log.info("接收到queue1队列的消息：[{}]", order);
     }
 
-    @RabbitListener(queues = "queue2")
+    // @RabbitListener(queues = "queue2")
     public void receive2(byte[] bytes) {
         //接收byte类型的消息，并反序列化
         Order order = (Order) SerializationUtils.deserialize(bytes);
         log.info("接收到queue2队列的消息：[{}]", order);
     }
 
-    @RabbitListener(queues = "queue3")
+    // @RabbitListener(queues = "queue3")
     public void receive3(Order order) {
         log.info("接收到queue3队列的消息：[{}]", order);
     }
