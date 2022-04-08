@@ -28,16 +28,16 @@ public class RabbitTemplateConfig {
         rabbitTemplate.setConfirmCallback(new RabbitTemplate.ConfirmCallback() {
             /**
              * 用于监听消息确认结果（消息是否发送到交换机），只要成功抵达（即ack=ture）
-             * @param correlationData：当前消息的唯一关联数据（里面包含消息id）
+             * @param correlationData：当前消息的唯一关联数据（里面包含消息id），可以在发送消息的时候进行设置new CorrelationData("消息id");
              * @param ack：消息是否成功抵达
              * @param cause：失败的原因
              */
             @Override
             public void confirm(CorrelationData correlationData, boolean ack, String cause) {
                 log.info("消息成功到达MQ");
-                log.info("当前消息的数据：{}", correlationData);
-                log.info("消息是否成功抵达：{}", ack);
-                log.info("失败原因：{}", cause);
+                // log.info("当前消息的数据：{}", correlationData);
+                // log.info("消息是否成功抵达：{}", ack);
+                // log.info("失败原因：{}", cause);
             }
         });
         // 设置消息抵达队列的确认回调，消息正确抵达队列不会回调此方法，如果没有抵达，则会触发此回调
@@ -53,11 +53,11 @@ public class RabbitTemplateConfig {
             @Override
             public void returnedMessage(Message message, int replyCode, String replyText, String exchange, String routingKey) {
                 log.info("消息抵达队列失败");
-                log.info("当前消息的内容：{}", message);
-                log.info("回复的状态码：{}", replyCode);
-                log.info("回复的文本内容：{}", replyText);
-                log.info("交换机：{}", exchange);
-                log.info("路由键：{}", routingKey);
+                // log.info("当前消息的内容：{}", message);
+                // log.info("回复的状态码：{}", replyCode);
+                // log.info("回复的文本内容：{}", replyText);
+                // log.info("交换机：{}", exchange);
+                // log.info("路由键：{}", routingKey);
             }
         });
     }

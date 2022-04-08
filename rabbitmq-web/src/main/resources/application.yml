@@ -20,3 +20,7 @@ spring:
     # 只要消息抵达队列，就以异步方式优先回调returnConfirm
     template:
       mandatory: true
+    # 开启消费者手动确认模式
+    listener:
+      simple:
+        acknowledge-mode: manual

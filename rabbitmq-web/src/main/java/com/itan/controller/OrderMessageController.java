@@ -87,11 +87,16 @@ public class OrderMessageController {
                 Order order = Order.builder().id(i)
                         .orderNo(UUID.randomUUID().toString())
                         .price(15000f).remark("创建订单").build();
-                rabbitTemplate.convertAndSend("direct_exchange","a", order, new CorrelationData(UUID.randomUUID().toString()));
+                //给消息绑定一个id值
+                CorrelationData correlationData = new CorrelationData(UUID.randomUUID().toString());
+                rabbitTemplate.convertAndSend("direct_exchange","a", order, correlationData);
             } else {
                 User user = User.builder().id(i).userName(UUID.randomUUID().toString())
                         .age(20 + i).build();
-                rabbitTemplate.convertAndSend("direct_exchange","c", user, new CorrelationData(UUID.randomUUID().toString()));
+                //给消息绑定一个id值
+                CorrelationData correlationData = new CorrelationData(UUID.randomUUID().toString());
+                //使用不存在路由键，这样消息就无法抵达去正确的队列
+                rabbitTemplate.convertAndSend("direct_exchange","c", user, correlationData);
             }
         }
     }
