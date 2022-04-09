@@ -10,7 +10,6 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>nio-web</module>
         <module>rabbitmq-web</module>
     </modules>
 
