@@ -1,0 +1,20 @@
+server:
+  port: 9001
+
+spring:
+  redis:
+    host: 101.35.155.147
+    port: 6379
+    password: 123456
+    # 连接超时
+    timeout: 2000
+    # 选择一个数据库（下标从0开始）
+    database: 1
+    jedis:
+      pool:
+        # 最大空闲数
+        max-idle: 6
+        # 最大连接数
+        max-active: 10
+        # 最小空闲数
+        min-idle: 2

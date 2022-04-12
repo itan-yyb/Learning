@@ -10,7 +10,7 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>rabbitmq-web</module>
+        <module>concurrent-web</module>
     </modules>
 
     <properties>
