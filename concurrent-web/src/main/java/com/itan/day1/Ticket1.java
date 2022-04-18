@@ -12,18 +12,22 @@ public class Ticket1 implements Runnable {
     @Override
     public void run() {
         while (flag) {
-            if (num <= 0) {
-                flag = false;
-                return;
-            }
-            //模拟网络延迟，放大问题发生的可能性
-            try {
-                Thread.sleep(200);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            num --;
-            System.out.println(Thread.currentThread().getName() + " 抢到了，还有 " + num + "张票");
+            ticket();
         }
+    }
+
+    public void ticket() {
+        if (num <= 0) {
+            flag = false;
+            return;
+        }
+        //模拟网络延迟，放大问题发生的可能性
+        try {
+            Thread.sleep(200);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        num --;
+        System.out.println(Thread.currentThread().getName() + " 抢到了，还有 " + num + "张票");
     }
 }
