@@ -118,15 +118,15 @@ public class AesUtils {
 
     public static void main(String[] args) throws Exception {
         CertificateInfo cert = new CertificateInfo();
-        cert.setNo("988");
+        cert.setNo("SVR2011300001");
         cert.setSerialNo("ADE8F-46D32-9A1BF-F88C8-7E149");
         cert.setLicenseDate("2020-11-30 17:53:09");//Mon Nov 30 17:53:09 GMT+08:00 2020
         cert.setValidDate("2023-11-30 00:00:00");//Thu Nov 30 00:00:00 GMT+08:00 2023
-        cert.setTotalCount(10000);
+        cert.setTotalCount(2000);
         cert.setType("comm");
         cert.setParams("");
         cert.setSignature("MCwCFGcgQhOF+SUTmutfFKj6Txx+0BvCAhRwprxVw9q94tx4hsT2nIqE3dinDg==");
-        cert.setUserCount(2000);
+        cert.setUserCount(1535);
         cert.setLicenseStatus("VALID");
         String jsonString = JSON.toJSONString(cert);
         System.out.println("json为：" + jsonString);
