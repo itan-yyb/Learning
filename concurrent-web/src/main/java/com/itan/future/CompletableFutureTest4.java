@@ -1,7 +1,5 @@
 package com.itan.future;
 
-import org.apache.tomcat.jni.Poll;
-
 import java.util.concurrent.*;
 
 /**
