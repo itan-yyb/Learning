@@ -18,3 +18,22 @@ spring:
         max-active: 10
         # 最小空闲数
         min-idle: 2
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 2000MB
+      max-request-size: 2000MB
+  minio:
+    url: http://office.lifecycle.cn:50010
+    proxy: http://office.lifecycle.cn:50010
+    access-key: root
+    secret-key: lifecycle
+    bucket: hblminio
+    endpoint: true
+#七牛云相关配置
+qiniu:
+  accessKey: M5R0bBj0dCsUAFXsxZv0hKYH4XgZQ_D32SYzf2Vw
+  secretKey: G8jfWcLwiW0514W5yL27bEW21Umro3ODe3OTc_TD
+  bucket: buding365
+  url: https://service.lifecycle.cn
+  region: 0

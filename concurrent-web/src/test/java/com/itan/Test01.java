@@ -24,6 +24,7 @@ public class Test01 {
         System.out.println("student2的hash：" + student2.hashCode());
         System.out.println(hashMap.get(student1));
         System.out.println(hashMap.get(student2));
+        System.out.println(System.getProperty("user.dir"));
     }
 }
 /**
