@@ -1,4 +1,4 @@
-package com.itan.config;
+package com.itan;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

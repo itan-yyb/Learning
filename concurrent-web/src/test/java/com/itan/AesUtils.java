@@ -2,7 +2,6 @@ package com.itan;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
-import com.itan.config.CertificateInfo;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.tomcat.util.codec.binary.Base64;
 import sun.misc.BASE64Encoder;

@@ -1,7 +1,5 @@
 package com.itan;
 
-import com.itan.syncutil.Student;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.junit.jupiter.api.Test;
 import java.util.HashMap;
 import java.util.Map;
