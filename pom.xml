@@ -10,7 +10,7 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>concurrent-web</module>
+        <module>rabbitmq-web</module>
         <module>nio-web</module>
     </modules>
 
