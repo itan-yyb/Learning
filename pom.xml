@@ -11,6 +11,7 @@
 
     <modules>
         <module>concurrent-web</module>
+        <module>nio-web</module>
     </modules>
 
     <properties>
